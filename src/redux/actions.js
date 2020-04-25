@@ -29,5 +29,8 @@ export const fetchMakes = () => {
 }
 
 export const deleteMake = (index) => {
-    let deleteMake = 
+    return {
+        type: 'DELETE_MAKE',
+        value: index
+    }
 }

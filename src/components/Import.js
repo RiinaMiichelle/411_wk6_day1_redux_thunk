@@ -1,6 +1,56 @@
 import React from 'react';
-import { Button, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Menu, MenuItem } from '@material-ui/core';
+import { Button, Table, TableHead,
+    TableBody, TableRow,
+    TableCell, TableContainer,
+    Menu, MenuItem, IconButton } from '@material-ui/core';
 import { MoreVert } from '@material-ui/icons';
+
+
+const DeleteMenu = (props) => {
+    const { deleteMake, makeIndex } = props;
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <div>
+        <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+        >
+            <MoreVert />
+        </IconButton>
+        <Menu
+            id="long-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+            style: {
+                maxHeight: 48 * 4.5,
+                width: '20ch',
+            },
+            }}
+        >
+            <MenuItem onClick={() => { deleteMake(makeIndex); handleClose(); }}>
+                Delete
+            </MenuItem>
+        </Menu>
+        </div>
+    );
+}
+
+
 
 const Import = (props) => {
     // fill out this component
@@ -8,6 +58,7 @@ const Import = (props) => {
     return (
     <div>
         <Button variant="contained" color="primary" onClick={props.fetchMakes}>Import</Button>
+    <h2>COUNT: {props.makes.length}</h2>
         <TableContainer>
             <Table>
                 <TableHead>
@@ -19,26 +70,17 @@ const Import = (props) => {
                 </TableHead>
                 <TableBody>
                     {props.makes.map((make, index) => (
-                        <TableRow>
+                        <TableRow key={index}>
                             <TableCell index={index}>{make.MakeId}</TableCell>
                             <TableCell index={index}>{make.MakeName}</TableCell>
-                            <TableCell index={index}>{make.Actions}</TableCell>
+                            <TableCell index={index}>
+                                <DeleteMenu deleteMake={props.deleteMake} makeIndex={index} />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
         </TableContainer>
-        <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
     </div>
     )
 }
